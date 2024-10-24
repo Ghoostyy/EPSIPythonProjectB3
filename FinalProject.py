@@ -28,17 +28,17 @@ Chaque mois, un taux d’intérêt est appliqué au solde du compte. Par exemple
 Le taux d’intérêt peut être défini lors de la création du compte. ✔️
 
 Possibilité de créer plusieurs comptes :
-L’utilisateur peut créer plusieurs comptes bancaires (par exemple, un compte épargne et un compte courant).
+L’utilisateur peut créer plusieurs comptes bancaires (par exemple, un compte épargne et un compte courant). ✔️
 
 L’utilisateur peut consulter, déposer, retirer, ou transférer de l’argent entre les différents comptes. ✔️
 
 Transfert d’argent entre comptes :
 
-L’utilisateur peut transférer de l’argent entre ses différents comptes (par exemple, transférer de l'argent d'un compte courant vers un compte épargne). 
+L’utilisateur peut transférer de l’argent entre ses différents comptes (par exemple, transférer de l'argent d'un compte courant vers un compte épargne). ✔️
 
 Affichage des détails des comptes :
 
-L’utilisateur peut afficher une liste de tous ses comptes avec les soldes actuels et les taux d’intérêt associés.
+L’utilisateur peut afficher une liste de tous ses comptes avec les soldes actuels et les taux d’intérêt associés. ✔️
 
 Ajout d’un code PIN pour chaque compte :
 Lors de la création de chaque compte, un code PIN est défini. Ce code PIN doit être saisi pour accéder au compte. ✔️
@@ -86,8 +86,12 @@ import tkinter as tk
 from tkinter import messagebox, simpledialog
 from save import save_data_to_json, load_data_from_json
 from Bank import Bank
+from BankAccount import BankAccount
 
 class BankApp(tk.Tk):
+    bank: Bank
+    current_account: BankAccount | None
+    
     def __init__(self):
         super().__init__()
         self.bank = Bank()
@@ -207,11 +211,53 @@ class BankApp(tk.Tk):
         tk.Button(self.account_frame, text="Transaction History", command=self.show_transaction_history).pack(pady=5)
         tk.Button(self.account_frame, text="Transfer Money", command=self.show_transfer_frame).pack(pady=5)
         tk.Button(self.account_frame, text="Account Details", command=self.show_account_details).pack(pady=5)
+        
+        if self.current_account.has_savings_account:
+            tk.Button(self.account_frame, text="Deposit to savings", command=self.transfer_to_savings_account).pack(pady=5)
+            tk.Button(self.account_frame, text="Withdraw from savings", command=self.withdraw_from_savings_account).pack(pady=5)
+        else :
+            tk.Button(self.account_frame, text="Create Savings Account", command=self.create_savings_account).pack(pady=5)
+        
         tk.Button(self.account_frame, text="Logout", command=self.show_main_menu).pack(pady=5)
+       
+    def refresht_account_menu(self):
+        self.hide_all_frames()
+        self.show_account_menu()
+             
+    def create_savings_account(self):
+        initial_balance = self.prompt_for_amount("Deposit")
+        if initial_balance is not None:
+            if self.current_account.create_savings_account(initial_balance):
+                messagebox.showinfo("Success", "Savings account created successfully!")
+                self.refresht_account_menu()
+            else:
+                messagebox.showerror("Error", "Savings account already exists, or invalid initial balance.")
+    
+    def transfer_to_savings_account(self):
+        amount = self.prompt_for_amount("Transfer")
+        if amount is not None:
+            if self.current_account.deposit_savings(amount):
+                messagebox.showinfo("Success", f"Transferred {amount:.2f}€ to savings account!")
+            else:
+                messagebox.showerror("Error", "Insufficient balance or invalid amount.")
+    
+    def withdraw_from_savings_account(self):
+        amount = self.prompt_for_amount("Withdraw")
+        if amount is not None:
+            if self.current_account.withdraw_savings(amount):
+                messagebox.showinfo("Success", f"Withdrew {amount:.2f}€ from savings account!")
+            else:
+                messagebox.showerror("Error", "Insufficient balance or invalid amount.")
 
     def check_balance(self):
         balance = self.current_account.check_balance()
-        messagebox.showinfo("Balance", f"Your balance is: {balance:.2f}€")
+        
+        if self.current_account.has_savings_account:
+            savings_balance = self.current_account.check_savings_balance()
+            messagebox.showinfo("Savings Balance", f"Your balance is: {balance:.2f}€ \nYour savings balance is: {savings_balance:.2f}€")
+        else: 
+            messagebox.showinfo("Balance", f"Your balance is: {balance:.2f}€")
+        
 
     def deposit_money(self):
         amount = self.prompt_for_amount("Deposit")
@@ -274,6 +320,11 @@ class BankApp(tk.Tk):
         details = f"Account: {self.current_account.name}\n" \
                   f"Balance: {self.current_account.balance:.2f}€\n" \
                   f"Interest Rate: {self.current_account.interest_rate}%"
+                  
+        if self.current_account.has_savings_account:
+            details += f"\nSavings Balance: {self.current_account.savings_balance:.2f}€" \
+                       f"\nSavings Interest Rate: {self.current_account.interest_rate * 2}%"
+            
         messagebox.showinfo("Account Details", details)
 
     def prompt_for_amount(self, action):
