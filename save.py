@@ -13,7 +13,9 @@ def save_data_to_json(bank, filename="data/bank_data.json"):
                 "interest_rate": account.interest_rate,
                 "pin_code": account.pin_code,
                 "transaction_history": account.transaction_history,
-                "interest_applied_this_month": account.interest_applied_this_month
+                "interest_applied_this_month": account.interest_applied_this_month,
+                "savings_account": account.has_savings_account,
+                "savings_balance": account.savings_balance
             }
             for name, account in bank.accounts.items()
         }
@@ -38,6 +40,10 @@ def load_data_from_json(bank, filename="data/bank_data.json"):
                 account.transaction_history = account_data["transaction_history"]
                 account.interest_applied_this_month = account_data["interest_applied_this_month"]
                 bank.accounts[name] = account
+                
+                if account_data["savings_account"]:
+                    account.has_savings_account = True
+                    account.savings_balance = account_data["savings_balance"]
         print("Data loaded successfully.")
     else:
         print("No previous data found, starting fresh.")

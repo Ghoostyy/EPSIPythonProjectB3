@@ -128,10 +128,6 @@ class BankApp(tk.Tk):
         self.entry_name = tk.Entry(self.create_account_frame)
         self.entry_name.grid(row=0, column=1)
 
-        tk.Label(self.create_account_frame, text="Initial Balance:").grid(row=1, column=0)
-        self.entry_balance = tk.Entry(self.create_account_frame)
-        self.entry_balance.grid(row=1, column=1)
-
         tk.Label(self.create_account_frame, text="Interest Rate (%):").grid(row=2, column=0)
         self.entry_interest_rate = tk.Entry(self.create_account_frame)
         self.entry_interest_rate.grid(row=2, column=1)
