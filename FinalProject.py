@@ -82,38 +82,42 @@ Sécurité avec code PIN : ✔️
 Lors de l’accès à un compte, l’utilisateur doit entrer le code PIN correspondant pour effectuer des actions. ✔️
 '''
 
-import tkinter as tk
+import customtkinter as ctk
 from tkinter import messagebox, simpledialog
 from save import save_data_to_json, load_data_from_json
 from Bank import Bank
 from BankAccount import BankAccount
 
-class BankApp(tk.Tk):
+# Initialize customtkinter settings
+ctk.set_appearance_mode("dark")  # Modes: "System" (default), "Dark", "Light"
+ctk.set_default_color_theme("blue")  # Themes: "blue" (default), "green", "dark-blue"
+
+class BankApp(ctk.CTk):
     bank: Bank
     current_account: BankAccount | None
-    
+
     def __init__(self):
         super().__init__()
         self.bank = Bank()
         load_data_from_json(self.bank)
         self.current_account = None
 
-        self.title("Simple Bank Manager")
-        self.geometry("400x400")
+        self.title("Bank Manager")
+        self.geometry("400x500")
 
-        # Create the main menu frame once
-        self.frame_menu = tk.Frame(self)
+        # Create the main menu frame
+        self.frame_menu = ctk.CTkFrame(self)
 
-        self.label_title = tk.Label(self.frame_menu, text="Simple Bank Manager", font=("Arial", 16))
+        self.label_title = ctk.CTkLabel(self.frame_menu, text="Bank Manager", font=("Arial", 16))
         self.label_title.pack(pady=10)
 
-        self.btn_create_account = tk.Button(self.frame_menu, text="Create Account", command=self.show_create_account_frame)
+        self.btn_create_account = ctk.CTkButton(self.frame_menu, text="Create Account", command=self.show_create_account_frame)
         self.btn_create_account.pack(pady=5)
 
-        self.btn_access_account = tk.Button(self.frame_menu, text="Access Account", command=self.show_access_account_frame)
+        self.btn_access_account = ctk.CTkButton(self.frame_menu, text="Access Account", command=self.show_access_account_frame)
         self.btn_access_account.pack(pady=5)
 
-        self.btn_quit = tk.Button(self.frame_menu, text="Quit", command=self.quit)
+        self.btn_quit = ctk.CTkButton(self.frame_menu, text="Quit", command=self.quit)
         self.btn_quit.pack(pady=5)
 
         # Display the main menu initially
@@ -121,44 +125,44 @@ class BankApp(tk.Tk):
 
     def show_create_account_frame(self):
         self.hide_all_frames()
-        self.create_account_frame = tk.Frame(self)
+        self.create_account_frame = ctk.CTkFrame(self)
         self.create_account_frame.pack(pady=20)
 
-        tk.Label(self.create_account_frame, text="Account Holder's Name:").grid(row=0, column=0)
-        self.entry_name = tk.Entry(self.create_account_frame)
+        ctk.CTkLabel(self.create_account_frame, text="Account Holder's Name:").grid(row=0, column=0)
+        self.entry_name = ctk.CTkEntry(self.create_account_frame)
         self.entry_name.grid(row=0, column=1)
 
-        tk.Label(self.create_account_frame, text="Interest Rate (%):").grid(row=2, column=0)
-        self.entry_interest_rate = tk.Entry(self.create_account_frame)
-        self.entry_interest_rate.grid(row=2, column=1)
+        ctk.CTkLabel(self.create_account_frame, text="Interest Rate (%):").grid(row=1, column=0)
+        self.entry_interest_rate = ctk.CTkEntry(self.create_account_frame)
+        self.entry_interest_rate.grid(row=1, column=1)
 
-        tk.Label(self.create_account_frame, text="Set a PIN Code:").grid(row=3, column=0)
-        self.entry_pin = tk.Entry(self.create_account_frame, show='*')
-        self.entry_pin.grid(row=3, column=1)
+        ctk.CTkLabel(self.create_account_frame, text="Set a PIN Code:").grid(row=2, column=0)
+        self.entry_pin = ctk.CTkEntry(self.create_account_frame, show='*')
+        self.entry_pin.grid(row=2, column=1)
 
-        self.btn_create = tk.Button(self.create_account_frame, text="Create Account", command=self.create_account)
-        self.btn_create.grid(row=4, columnspan=2)
+        self.btn_create = ctk.CTkButton(self.create_account_frame, text="Create Account", command=self.create_account)
+        self.btn_create.grid(row=3, columnspan=2, pady=10)
 
-        self.btn_back = tk.Button(self.create_account_frame, text="Back", command=self.show_main_menu)
-        self.btn_back.grid(row=5, columnspan=2)
+        self.btn_back = ctk.CTkButton(self.create_account_frame, text="Back", command=self.show_main_menu)
+        self.btn_back.grid(row=4, columnspan=2)
 
     def show_access_account_frame(self):
         self.hide_all_frames()
-        self.access_account_frame = tk.Frame(self)
+        self.access_account_frame = ctk.CTkFrame(self)
         self.access_account_frame.pack(pady=20)
 
-        tk.Label(self.access_account_frame, text="Account Holder's Name:").grid(row=0, column=0)
-        self.entry_access_name = tk.Entry(self.access_account_frame)
+        ctk.CTkLabel(self.access_account_frame, text="Account Holder's Name:").grid(row=0, column=0)
+        self.entry_access_name = ctk.CTkEntry(self.access_account_frame)
         self.entry_access_name.grid(row=0, column=1)
 
-        tk.Label(self.access_account_frame, text="Enter PIN Code:").grid(row=1, column=0)
-        self.entry_access_pin = tk.Entry(self.access_account_frame, show='*')
+        ctk.CTkLabel(self.access_account_frame, text="Enter PIN Code:").grid(row=1, column=0)
+        self.entry_access_pin = ctk.CTkEntry(self.access_account_frame, show='*')
         self.entry_access_pin.grid(row=1, column=1)
 
-        self.btn_access = tk.Button(self.access_account_frame, text="Access Account", command=self.access_account)
-        self.btn_access.grid(row=2, columnspan=2)
+        self.btn_access = ctk.CTkButton(self.access_account_frame, text="Access Account", command=self.access_account)
+        self.btn_access.grid(row=2, columnspan=2, pady=10)
 
-        self.btn_back_access = tk.Button(self.access_account_frame, text="Back", command=self.show_main_menu)
+        self.btn_back_access = ctk.CTkButton(self.access_account_frame, text="Back", command=self.show_main_menu)
         self.btn_back_access.grid(row=3, columnspan=2)
 
     def show_main_menu(self):
@@ -175,14 +179,14 @@ class BankApp(tk.Tk):
             initial_balance = 0
             interest_rate = float(self.entry_interest_rate.get())
             pin_code = self.entry_pin.get()
-            if name and initial_balance >= 0 and interest_rate >= 0 and pin_code:
+            if name and interest_rate >= 0 and pin_code:
                 self.bank.create_account(name, initial_balance, interest_rate, pin_code)
                 messagebox.showinfo("Success", f"Account '{name}' created successfully!")
                 self.show_main_menu()
             else:
                 messagebox.showerror("Error", "Please fill in all fields with valid data.")
         except ValueError:
-            messagebox.showerror("Error", "Invalid input for balance or interest rate.")
+            messagebox.showerror("Error", "Invalid input for interest rate.")
 
     def access_account(self):
         name = self.entry_access_name.get()
@@ -196,26 +200,26 @@ class BankApp(tk.Tk):
 
     def show_account_menu(self):
         self.hide_all_frames()
-        self.account_frame = tk.Frame(self)
+        self.account_frame = ctk.CTkFrame(self)
         self.account_frame.pack(pady=20)
 
-        tk.Label(self.account_frame, text=f"Welcome, {self.current_account.name}!").pack()
+        ctk.CTkLabel(self.account_frame, text=f"Welcome, {self.current_account.name}!").pack()
 
-        tk.Button(self.account_frame, text="Check Balance", command=self.check_balance).pack(pady=5)
-        tk.Button(self.account_frame, text="Deposit Money", command=self.deposit_money).pack(pady=5)
-        tk.Button(self.account_frame, text="Withdraw Money", command=self.withdraw_money).pack(pady=5)
-        tk.Button(self.account_frame, text="Transaction History", command=self.show_transaction_history).pack(pady=5)
-        tk.Button(self.account_frame, text="Transfer Money", command=self.show_transfer_frame).pack(pady=5)
-        tk.Button(self.account_frame, text="Account Details", command=self.show_account_details).pack(pady=5)
+        ctk.CTkButton(self.account_frame, text="Check Balance", command=self.check_balance).pack(pady=5)
+        ctk.CTkButton(self.account_frame, text="Deposit Money", command=self.deposit_money).pack(pady=5)
+        ctk.CTkButton(self.account_frame, text="Withdraw Money", command=self.withdraw_money).pack(pady=5)
+        ctk.CTkButton(self.account_frame, text="Transaction History", command=self.show_transaction_history).pack(pady=5)
+        ctk.CTkButton(self.account_frame, text="Transfer Money", command=self.show_transfer_frame).pack(pady=5)
+        ctk.CTkButton(self.account_frame, text="Account Details", command=self.show_account_details).pack(pady=5)
         
         if self.current_account.has_savings_account:
-            tk.Button(self.account_frame, text="Deposit to savings", command=self.transfer_to_savings_account).pack(pady=5)
-            tk.Button(self.account_frame, text="Withdraw from savings", command=self.withdraw_from_savings_account).pack(pady=5)
-        else :
-            tk.Button(self.account_frame, text="Create Savings Account", command=self.create_savings_account).pack(pady=5)
-        
-        tk.Button(self.account_frame, text="Logout", command=self.show_main_menu).pack(pady=5)
-       
+            ctk.CTkButton(self.account_frame, text="Deposit to Savings", command=self.transfer_to_savings_account).pack(pady=5)
+            ctk.CTkButton(self.account_frame, text="Withdraw from Savings", command=self.withdraw_from_savings_account).pack(pady=5)
+        else:
+            ctk.CTkButton(self.account_frame, text="Create Savings Account", command=self.create_savings_account).pack(pady=5)
+
+        ctk.CTkButton(self.account_frame, text="Logout", command=self.show_main_menu).pack(pady=5)
+
     def refresht_account_menu(self):
         self.hide_all_frames()
         self.show_account_menu()
@@ -278,23 +282,23 @@ class BankApp(tk.Tk):
 
     def show_transfer_frame(self):
         self.hide_all_frames()
-        self.transfer_frame = tk.Frame(self)
+        self.transfer_frame = ctk.CTkFrame(self)
         self.transfer_frame.pack(pady=20)
 
-        tk.Label(self.transfer_frame, text="Transfer Money").pack(pady=10)
+        ctk.CTkLabel(self.transfer_frame, text="Transfer Money").pack(pady=10)
 
-        tk.Label(self.transfer_frame, text="Destination Account:").pack(pady=5)
-        self.entry_transfer_destination = tk.Entry(self.transfer_frame)
+        ctk.CTkLabel(self.transfer_frame, text="Destination Account:").pack(pady=5)
+        self.entry_transfer_destination = ctk.CTkEntry(self.transfer_frame)
         self.entry_transfer_destination.pack(pady=5)
 
-        tk.Label(self.transfer_frame, text="Amount:").pack(pady=5)
-        self.entry_transfer_amount = tk.Entry(self.transfer_frame)
+        ctk.CTkLabel(self.transfer_frame, text="Amount:").pack(pady=5)
+        self.entry_transfer_amount = ctk.CTkEntry(self.transfer_frame)
         self.entry_transfer_amount.pack(pady=5)
 
-        self.btn_transfer = tk.Button(self.transfer_frame, text="Transfer", command=self.transfer_money)
+        self.btn_transfer = ctk.CTkButton(self.transfer_frame, text="Transfer", command=self.transfer_money)
         self.btn_transfer.pack(pady=10)
 
-        self.btn_back_transfer = tk.Button(self.transfer_frame, text="Back", command=self.show_account_menu)
+        self.btn_back_transfer = ctk.CTkButton(self.transfer_frame, text="Back", command=self.show_account_menu)
         self.btn_back_transfer.pack(pady=5)
 
     def transfer_money(self):

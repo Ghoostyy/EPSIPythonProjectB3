@@ -2,28 +2,33 @@
     "accounts": {
         "Thomas": {
             "name": "Thomas",
-            "balance": 7110.0,
+            "balance": 6910.0,
             "interest_rate": 10.0,
             "pin_code": "1234",
             "transaction_history": [
                 "Withdrawal of 10.0\u20ac on 2024-10-24 19:57:23",
                 "Deposit of 10.0\u20ac on 2024-10-24 19:57:28",
                 "Deposit of 100.0\u20ac on 2024-10-24 19:58:19",
-                "Interest of 1010.00\u20ac applied on 2024-10-24 20:48:40"
+                "Interest of 1010.00\u20ac applied on 2024-10-24 20:48:40",
+                "Deposit of 1000.0\u20ac on 2024-10-25 15:26:18",
+                "Withdrawal of 200.0\u20ac on 2024-10-25 15:26:26",
+                "Withdrawal of 100.0\u20ac on 2024-10-25 15:26:34"
             ],
             "interest_applied_this_month": true,
             "savings_account": true,
-            "savings_balance": 1000.0
+            "savings_balance": 1900.0
         },
         "Alexandre": {
             "name": "Alexandre",
-            "balance": 1900.0,
+            "balance": 2190.0,
             "interest_rate": 10.0,
             "pin_code": "1234",
             "transaction_history": [
-                "Withdrawal of 100.0\u20ac on 2024-10-24 19:58:19"
+                "Withdrawal of 100.0\u20ac on 2024-10-24 19:58:19",
+                "Interest of 190.00\u20ac applied on 2024-10-25 15:26:34",
+                "Deposit of 100.0\u20ac on 2024-10-25 15:26:34"
             ],
-            "interest_applied_this_month": false,
+            "interest_applied_this_month": true,
             "savings_account": false,
             "savings_balance": 0.0
         }

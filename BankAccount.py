@@ -87,6 +87,7 @@ class BankAccount:
             self.has_savings_account = True
             self.savings_balance = initial_balance
             self.balance -= initial_balance
+            self.transaction_history.append(f"Deposit of {initial_balance}€ on Savings on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
             return True
         return False
     
@@ -95,6 +96,7 @@ class BankAccount:
         if self.has_savings_account and amount > 0 and self.balance >= amount:
             self.balance -= amount
             self.savings_balance += amount
+            self.transaction_history.append(f"Deposit of {amount}€ on Savings on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
             return True
         return False
     
@@ -103,5 +105,6 @@ class BankAccount:
         if self.has_savings_account and amount > 0 and self.savings_balance >= amount:
             self.balance += amount
             self.savings_balance -= amount
+            self.transaction_history.append(f"Withdrawal of {amount}€ on Savings on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
             return True
         return False
